@@ -6,13 +6,22 @@ package com.thinksoftlab.atmlocator.i18n
  * back to the English string. Do not fill [reviewedChichewa] with machine translation.
  */
 enum class StringKey {
+    BrandName,
     FindUsableAtm,
+    HomeSupporting,
     UseMyLocation,
     GettingLocation,
     GpsDeniedTip,
+    OpenSettings,
+    SearchHint,
+    Filters,
     NoAtmsMatch,
+    ClearFilters,
+    ChangeCity,
     MayBeOutdated,
     AtmCount,
+    NearbyUnavailable,
+    AtmNotListed,
     Fresh,
     Aging,
     StaleNotLive,
@@ -54,13 +63,22 @@ fun text(key: StringKey, language: AppLanguage, n: Long? = null): String {
 internal fun isChichewaReviewed(key: StringKey): Boolean = reviewedChichewa.containsKey(key)
 
 private fun english(key: StringKey): String = when (key) {
+    StringKey.BrandName -> "ATM Locator"
     StringKey.FindUsableAtm -> "Find a usable ATM"
+    StringKey.HomeSupporting -> "Choose a city or use your location."
     StringKey.UseMyLocation -> "Use my location"
     StringKey.GettingLocation -> "Getting location…"
-    StringKey.GpsDeniedTip -> "Location is off. Open settings"
+    StringKey.GpsDeniedTip -> "Location is off."
+    StringKey.OpenSettings -> "Open settings"
+    StringKey.SearchHint -> "Search by place or bank"
+    StringKey.Filters -> "Filters"
     StringKey.NoAtmsMatch -> "No ATMs match"
+    StringKey.ClearFilters -> "Clear filters"
+    StringKey.ChangeCity -> "Change city"
     StringKey.MayBeOutdated -> "May be outdated"
     StringKey.AtmCount -> "{n} ATMs"
+    StringKey.NearbyUnavailable -> "ATM search is not available yet."
+    StringKey.AtmNotListed -> "This ATM is not listed"
     StringKey.Fresh -> "Fresh"
     StringKey.Aging -> "Aging"
     StringKey.StaleNotLive -> "Stale — not live"
