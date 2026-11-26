@@ -1,8 +1,22 @@
+import atmlocator.GenerateAndroidApiConfig
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
+    alias(libs.plugins.kotlinSerialization)
+}
+
+// The Android KMP library plugin does not generate BuildConfig. This task writes the
+// Android ApiConfig actual from local.properties. A missing file or key becomes "".
+// androidApp mirrors the same keys into its own BuildConfig. Do not commit secrets.
+val sharedLocalPropertiesText = providers.fileContents(
+    rootProject.layout.projectDirectory.file("local.properties"),
+).asText.orElse("")
+
+val generateAndroidApiConfig = tasks.register<GenerateAndroidApiConfig>("generateAndroidApiConfig") {
+    localPropertiesText.set(sharedLocalPropertiesText)
+    outputDirectory.set(layout.buildDirectory.dir("generated/apiConfig/android"))
 }
 
 kotlin {
@@ -41,13 +55,27 @@ kotlin {
     }
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+        jsMain.dependencies {
+            implementation(libs.wrappers.browser)
+            implementation(libs.ktor.client.js)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-        jsMain.dependencies {
-            implementation(libs.wrappers.browser)
+        androidMain {
+            kotlin.srcDir(generateAndroidApiConfig.flatMap { it.outputDirectory })
         }
     }
 }

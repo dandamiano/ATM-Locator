@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
@@ -19,6 +20,26 @@ dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
 
+// Same keys as sharedLogic's generated Android ApiConfig. Empty when local.properties is absent.
+// The KMP library plugin cannot emit BuildConfig, so the app module holds the fields for the app.
+val localPropertiesText = providers.fileContents(
+    rootProject.layout.projectDirectory.file("local.properties"),
+).asText.orElse("")
+
+fun localBuildConfigString(name: String): String {
+    val properties = Properties()
+    val text = localPropertiesText.get()
+    if (text.isNotBlank()) {
+        properties.load(text.reader())
+    }
+    val value = properties.getProperty(name)?.trim().orEmpty()
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"")
+        .replace("\n", "\\n")
+        .replace("\r", "\\r")
+    return "\"$value\""
+}
+
 android {
     namespace = "com.thinksoftlab.atmlocator"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -29,6 +50,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "ATM_API_BASE_URL", localBuildConfigString("ATM_API_BASE_URL"))
+        buildConfigField("String", "ATM_APP_KEY", localBuildConfigString("ATM_APP_KEY"))
     }
     packaging {
         resources {
@@ -50,5 +73,6 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }

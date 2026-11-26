@@ -4,5 +4,9 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>ATM_API_BASE_URL</key>
+	<string>$(ATM_API_BASE_URL)</string>
+	<key>ATM_APP_KEY</key>
+	<string>$(ATM_APP_KEY)</string>
 </dict>
 </plist>

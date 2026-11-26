@@ -5,3 +5,9 @@ PRODUCT_BUNDLE_IDENTIFIER=com.thinksoftlab.atmlocator.ATMLocator$(TEAM_ID)
 
 CURRENT_PROJECT_VERSION=1
 MARKETING_VERSION=1.0
+
+// Public API origin for the iOS app. Empty is valid. Do not commit a secret or a guessed host.
+// Info.plist substitutes these build settings. sharedLogic reads them at runtime from the main bundle.
+ATM_API_BASE_URL=
+// Optional. Empty means the client omits X-App-Key.
+ATM_APP_KEY=
