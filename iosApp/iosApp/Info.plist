@@ -8,5 +8,7 @@
 	<string>$(ATM_API_BASE_URL)</string>
 	<key>ATM_APP_KEY</key>
 	<string>$(ATM_APP_KEY)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>ATM Locator uses your location to find nearby ATMs. Location stays on this device and is only used for that search.</string>
 </dict>
 </plist>
